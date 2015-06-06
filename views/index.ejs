@@ -4,37 +4,63 @@
 	<meta charset="UTF-8">
 	<title><%= title %></title>
 	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<link rel="stylesheet" type="text/css" href="/stylesheets/least.min.css" />
 </head>
 <body>
 
-    <h1><%= title %></h1>
+<h1><%= title %></h1>
 
-	<table class="list">
-		<%
-		if (data) {
-			for (var i = 0; i < data.length; i++) {
-		%>
-		<tr>
-			<td class="user"><img src="<%= data[i].user.profile_picture %>" class="image_user"></br>
-				<%= data[i].user.username %></td>
-			<td class="caption"><%= data[i].caption.text %></td>
-			<td><img src="<%= data[i].images.thumbnail.url %>"></td>
-			<td>
-				<%
-				if (data[i].location) {
-					var lat = data[i].location.latitude;
-					var lon = data[i].location.longitude;
-					var name = data[i].location.name;
-					var geo = '<a href="https://www.google.co.jp/maps/@' + lat + ',' + lon + ',17z" target="_blank">' + name + '</a>';
-				%>
-				<%= geo %>
-				<% } %>
-			</td>
-		</tr>
-		<%
-			}
-		}
-		%>
-	</table>
+<!-- Least Gallery -->
+<section id="least">
+
+<!-- Least Gallery: Fullscreen Preview -->
+<div class="least-preview"></div>
+
+<!-- Least Gallery: Thumbnails -->
+<ul class="least-gallery">
+
+<%
+if (data) {
+	for (var i = 0; i < data.length; i++) {
+%>
+<!-- ここから一個の画像 -->
+<li>
+	<%
+	var geo = "";
+	if (data[i].location) {
+		var lat = data[i].location.latitude;
+		var lon = data[i].location.longitude;
+		var name = data[i].location.name;
+		geo = '<a href="https://www.google.co.jp/maps/@' + lat + ',' + lon + ',17z" target="_blank">' + name + '</a>';
+	}
+	//
+	var date = new Date(data[i].created_time * 1000);
+	var formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+	//
+	var linkWithDate = '<a href="' + data[i].link + '">' + date + '</a>';
+	%>
+	<a href="<%= data[i].images.standard_resolution.url %>" title="<%= data[i].user.username %>" data-subtitle=" <%= formattedDate %>" data-caption="<%= data[i].user.username %></br><%= data[i].caption.text %></br><%= linkWithDate %></br><%= geo %>">
+		<img src="<%= data[i].images.thumbnail.url %>" alt="Alt Iage Text" /> 
+	</a>
+</li>
+<!-- ここまで一個の画像あとは繰り返し -->
+<%
+	}
+}
+%>
+</section>
+<!-- Least Gallery end -->
+
+<!-- jQuery library -->
+<script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+<!-- least.js library -->
+<script src="/javascripts/least.min.js"></script>
+
+<script>
+	$(document).ready(function(){
+		$('.least-gallery').least();
+	});
+</script>
+
 </body>
 </html>

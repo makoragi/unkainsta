@@ -1,11 +1,40 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+	<title><%= title %></title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+
+	<table class="list">
+		<%
+		if (data) {
+			for (var i = 0; i < data.length; i++) {
+		%>
+		<tr>
+			<td class="user"><img src="<%= data[i].user.profile_picture %>" class="image_user"></br>
+				<%= data[i].user.username %></td>
+			<td class="caption"><%= data[i].caption.text %></td>
+			<td><img src="<%= data[i].images.thumbnail.url %>"></td>
+			<td>
+				<%
+				if (data[i].location) {
+					var lat = data[i].location.latitude;
+					var lon = data[i].location.longitude;
+					var name = data[i].location.name;
+					var geo = '<a href="https://www.google.co.jp/maps/@' + lat + ',' + lon + ',17z" target="_blank">' + name + '</a>';
+				%>
+				<%= geo %>
+				<% } %>
+			</td>
+		</tr>
+		<%
+			}
+		}
+		%>
+	</table>
+</body>
 </html>

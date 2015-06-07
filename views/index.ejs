@@ -16,31 +16,40 @@
 <!-- Least Gallery: Fullscreen Preview -->
 <div class="least-preview"></div>
 
+<% if (json.pagination.next_max_tag_id) { %>
+	<div id="topbar">
+	<form method="post">
+	<input type="hidden" name="max_tag_id" value="<%= json.pagination.next_max_tag_id %>">
+	<input type="submit" value="Load more" id="next_key">
+	</form>
+	</div>
+<% } %>
+
 <!-- Least Gallery: Thumbnails -->
 <ul class="least-gallery">
 
 <%
-if (data) {
-	for (var i = 0; i < data.length; i++) {
+if (json.data) {
+	for (var i = 0; i < json.data.length; i++) {
 %>
 <!-- ここから一個の画像 -->
 <li>
 	<%
 	var geo = "";
-	if (data[i].location) {
-		var lat = data[i].location.latitude;
-		var lon = data[i].location.longitude;
-		var name = data[i].location.name;
+	if (json.data[i].location) {
+		var lat = json.data[i].location.latitude;
+		var lon = json.data[i].location.longitude;
+		var name = json.data[i].location.name;
 		geo = '<a href="https://www.google.co.jp/maps/@' + lat + ',' + lon + ',17z" target="_blank">' + name + '</a>';
 	}
 	//
-	var date = new Date(data[i].created_time * 1000);
+	var date = new Date(json.data[i].created_time * 1000);
 	var formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
 	//
-	var linkWithDate = '<a href="' + data[i].link + '">' + date + '</a>';
+	var linkWithDate = '<a href="' + json.data[i].link + '">' + date + '</a>';
 	%>
-	<a href="<%= data[i].images.standard_resolution.url %>" title="<%= data[i].user.username %>" data-subtitle=" <%= formattedDate %>" data-caption="<%= data[i].user.username %></br><%= data[i].caption.text %></br><%= linkWithDate %></br><%= geo %>">
-		<img src="<%= data[i].images.thumbnail.url %>" alt="Alt Iage Text" /> 
+	<a href="<%= json.data[i].images.standard_resolution.url %>" title="<%= json.data[i].user.username %>" data-subtitle=" <%= formattedDate %>" data-caption="<%= json.data[i].user.username %></br><%= json.data[i].caption.text %></br><%= linkWithDate %></br><%= geo %>">
+		<img src="<%= json.data[i].images.thumbnail.url %>" alt="Alt Iage Text" /> 
 	</a>
 </li>
 <!-- ここまで一個の画像あとは繰り返し -->
